@@ -1,9 +1,9 @@
+import { HeroService } from './../core/services/hero/hero.service';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Hero } from '../share/models';
 import { ActivatedRoute } from '@angular/router';
-import { HeroService } from '../core/services/hero/hero.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -33,5 +33,11 @@ export class HeroDetailComponent {
 
   goBack(): void {
     this.location.back();
+  }
+
+  save(): void {
+    if (this.hero) {
+      this.heroService.updateHero(this.hero).subscribe(() => this.goBack());
+    }
   }
 }
