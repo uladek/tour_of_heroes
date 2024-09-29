@@ -1,11 +1,6 @@
-<p>dashboard works!</p>
 
 <h2>Top heroes</h2>
 <div class="heroes-menu">
     @for(hero of heroes; track hero) {
-
-      <a routerLink="/detail/{{hero.id}}"> {{hero.name}}</a>
-
-      <a roterlink="/dashboard">Dashboard</a>
-
+      <a routerLink="/detail/{{hero.id}}">{{hero.name}}</a>
  }
