@@ -3,11 +3,18 @@ import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HeroesComponent } from './heroes/heroes.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeroesComponent, FormsModule, CommonModule],
+  imports: [
+    RouterOutlet,
+    HeroesComponent,
+    FormsModule,
+    CommonModule,
+    MessagesComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
