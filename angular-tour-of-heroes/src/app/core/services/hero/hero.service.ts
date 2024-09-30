@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HEROES } from '../../../share/mock-heroes';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Hero } from '../../../share/models';
 import { MessageService } from '../message/message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -27,6 +27,20 @@ export class HeroService {
       catchError(this.handleError<Hero[]>('getHeroes', []))
     );
   }
+
+    /** GET hero by id. Return `undefined` when id not found */
+    getHeroNo404<Data>(id: number): Observable<Hero> {
+      const url = `${this.heroesUrl}/?id=${id}`;
+      return this.http.get<Hero[]>(url)
+        .pipe(
+          map(heroes => heroes[0]), // returns a {0|1} element array
+          tap(h => {
+            const outcome = h ? 'fetched' : 'did not find';
+            this.log(`${outcome} hero id=${id}`);
+          }),
+          catchError(this.handleError<Hero>(`getHero id=${id}`))
+        );
+    }
 
   // getHero(id: number): Observable<Hero> {
   //   const hero = HEROES.find((h) => h.id === id)!;
@@ -91,5 +105,21 @@ export class HeroService {
   /** Log a HeroService message with the MessageService */
   private log(message: string) {
     this.messageService.add(`HeroService: ${message}`);
+  }
+
+  /* GET heroes whose name contains search term */
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+      tap((x) =>
+        x.length
+          ? this.log(`found heroes matching "${term}"`)
+          : this.log(`no heroes matching "${term}"`)
+      ),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    );
   }
 }
